@@ -1071,15 +1071,17 @@
     });
 
     /* ---- QR code pre-fill ----
-       A certificate's QR code should point to this page with the
-       certificate number in the URL, e.g.:
-       https://aiem.co.za/verify/?id=AIEM-BLS-25-0088
+       A certificate's QR code points to this page with the certificate
+       number in the URL, e.g.:
+       https://aiem.co.za/verification?code=AIEM-BLS-24-0193
        On load, if that parameter is present, pre-fill the search box
        with it so the certificate number is ready to go — the user
-       just needs to press "Verify". */
+       just needs to press "Verify". Accepts "code" (what the live QR
+       codes use) plus a few aliases in case older codes are still
+       in circulation. */
     (function prefillFromQR() {
       const params = new URLSearchParams(window.location.search);
-      const idFromQR = params.get('id') || params.get('cert') || params.get('certificate');
+      const idFromQR = params.get('code') || params.get('id') || params.get('cert') || params.get('certificate');
       if (idFromQR) {
         document.getElementById('search-input').value = idFromQR;
       }
