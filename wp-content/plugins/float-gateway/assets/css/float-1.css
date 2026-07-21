@@ -1,0 +1,238 @@
+/**
+ * Featherlight - ultra slim jQuery lightbox
+ * Version 1.7.14 - http://noelboss.github.io/featherlight/
+ *
+ * Copyright 2019, NoÃ«l Raoul Bossart (http://www.noelboss.com)
+ * MIT Licensed.
+**/
+html.with-featherlight {
+	overflow: hidden
+}
+
+.featherlight {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2147483647;
+	text-align: center;
+	white-space: nowrap;
+	cursor: pointer;
+	background: #333;
+	background: rgba(0, 0, 0, 0)
+}
+
+.featherlight:last-of-type {
+	background: rgba(0, 0, 0, .8)
+}
+
+.featherlight:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle
+}
+
+.featherlight .featherlight-content {
+	position: relative;
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+	overflow: auto;
+	padding: 25px 25px 0;
+	border-bottom: 25px solid transparent;
+	margin-left: 5%;
+	margin-right: 5%;
+	max-height: 95%;
+	background: #fff;
+	cursor: auto;
+	white-space: normal
+}
+
+.featherlight .featherlight-inner {
+	display: block
+}
+
+.featherlight link.featherlight-inner, .featherlight script.featherlight-inner, .featherlight style.featherlight-inner {
+	display: none
+}
+
+.featherlight .featherlight-close-icon {
+	position: absolute;
+	z-index: 9999;
+	top: 0;
+	right: 0;
+	line-height: 25px;
+	width: 25px;
+	cursor: pointer;
+	text-align: center;
+	font-family: Arial, sans-serif;
+	background: #fff;
+	background: rgba(255, 255, 255, .3);
+	color: #000;
+	border: 0;
+	padding: 0
+}
+
+.featherlight .featherlight-close-icon::-moz-focus-inner {
+	border: 0;
+	padding: 0
+}
+
+.featherlight .featherlight-image {
+	width: 100%
+}
+
+.featherlight-iframe .featherlight-content {
+	border-bottom: 0;
+	padding: 0;
+	-webkit-overflow-scrolling: touch
+}
+
+.featherlight iframe {
+	border: 0
+}
+
+.featherlight * {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+@media only screen and (max-width:1024px) {
+	.featherlight .featherlight-content {
+		margin-left: 0;
+		margin-right: 0;
+		max-height: 98%;
+		padding: 10px 10px 0;
+		border-bottom: 10px solid transparent
+	}
+}
+
+@media print {
+	html.with-featherlight>*>:not(.featherlight) {
+		display: none
+	}
+}
+
+/* Custom Float Css */
+span.black *, span.black {
+	color: black !important;
+}
+
+.featherlight .featherlight-content {
+	width: 100%;
+	max-width: 800px;
+	padding: 0 !important;
+	overflow: hidden;
+}
+
+li.wc_payment_method.payment_method_float img {
+	max-width: 35px;
+    margin-bottom: 5px;
+}
+
+.float-lightbox {
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: 1.5em !important;
+	margin-bottom: 20px;
+	padding: 20px 0;
+	display: flex;
+	align-content: center;
+	align-items: center;
+	justify-content: flex-start;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	color: #000000;
+}
+
+.float-lightbox img {
+	float: left;
+	margin-right: 20px;
+	max-width: 80px;
+	height: auto;
+}
+
+.float-lightbox a {
+        text-decoration: underline;
+        display: block;
+}
+
+.float-hidden {
+        display: none;
+}
+
+.float-clear {
+        clear: both;
+}
+
+.featherlight iframe {
+	max-height: 80vh;
+	max-width: 100%;
+}
+
+#float_on_archive,
+#float-on-checkout {
+	font-family: sans-serif;
+	margin-top: 4px;
+	color: #000000;
+}
+
+#float_on_archive {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+}
+
+.float-highlight, .float-highlight span, .float-highlight span.woocommerce-Price-amount {
+	color: #ef0f60;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+#float-on-checkout .float-logo {
+	vertical-align: baseline;
+	max-width: 50px;
+}
+
+.float-small {
+	font-size: 11px;
+}
+
+#float_on_archive {
+	color: #000;
+}
+
+#float_on_archive .float-logo {
+	-webkit-transform: unset;
+	-ms-transform: unset;
+	transform: unset;
+	vertical-align: top;
+	max-width: 30px !important;
+	display: inline-block;
+}
+
+span#vprodpriceupd * {
+	font-size: inherit;
+	font-weight: normal;
+	color: #ef0f60;
+}
+
+.float_error, .float_error * {
+	color: red;
+}
+
+li.wc_payment_method.payment_method_float {
+/* 	display: grid;
+	grid-template-columns: 1fr; */
+}
+
+input#payment_method_float {
+/* 	position: absolute; */
+}
