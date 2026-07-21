@@ -1070,19 +1070,18 @@
       if (e.key === 'Enter') lookupCertificate();
     });
 
-    /* ---- QR code auto-verify ----
+    /* ---- QR code pre-fill ----
        A certificate's QR code should point to this page with the
        certificate number in the URL, e.g.:
        https://aiem.co.za/verify/?id=AIEM-BLS-25-0088
        On load, if that parameter is present, pre-fill the search box
-       and run the lookup automatically so scanning the QR code goes
-       straight to the result. */
-    (function autoVerifyFromQR() {
+       with it so the certificate number is ready to go — the user
+       just needs to press "Verify". */
+    (function prefillFromQR() {
       const params = new URLSearchParams(window.location.search);
       const idFromQR = params.get('id') || params.get('cert') || params.get('certificate');
       if (idFromQR) {
         document.getElementById('search-input').value = idFromQR;
-        lookupCertificate(idFromQR);
       }
     })();
   </script>
