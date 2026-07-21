@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Verification | AIEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0b1c2e;
+      --navy-mid: #112540;
+      --gold: #c41230;
+      --gold-light: #e8555f;
+      --gold-pale: #fdeceb;
+      --emerald: #1a6b4a;
+      --emerald-light: #2dba7e;
+      --amber: #92700a;
+      --amber-bg: #fff8e6;
+      --amber-border: #ffdf99;
+      --amber-dot: #e0a80f;
+      --cream: #fafaf6;
+      --steel: #2e4057;
+      --muted: #6b7f96;
+      --border: #dde4ef;
+      --green-bg: #edfaf4;
+      --green-border: #a8eecf;
+      --red-bg: #fff0f0;
+      --red-border: #ffc5c5;
+      --red: #c0392b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 5%, rgba(196,18,48,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 85% 95%, rgba(26,107,74,0.07) 0%, transparent 55%),
+        repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.008) 40px, rgba(255,255,255,0.008) 41px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    .header-bar {
+      width: 100%;
+      background: linear-gradient(135deg, #08121e 0%, #0f2038 100%);
+      border-bottom: 2px solid var(--gold);
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-seal {
+      width: 80px;
+      height: 56px;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      flex-shrink: 0;
+    }
+
+    .logo-seal img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-text strong {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: #fff;
+      display: block;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-text span {
+      font-size: 11px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .header-tag {
+      text-align: right;
+    }
+
+    .header-tag .tag-top {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold-light);
+    }
+
+    .header-tag .tag-bottom {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 3px;
+    }
+
+    /* Accreditation logos bar */
+    .accreditation-bar {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(196,18,48,0.18);
+      padding: 12px 32px;
+      position: relative;
+      z-index: 9;
+    }
+
+    .accreditation-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .accred-label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.35);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .accred-logos {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .accred-logo-wrap {
+      background: rgba(255,255,255,0.92);
+      border-radius: 8px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .accred-logo-wrap:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(196,18,48,0.25);
+    }
+
+    .accred-logo-wrap img {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
+
+    /* ── MAIN WRAPPER ── */
+    .main-wrapper {
+      max-width: 900px;
+      width: 100%;
+      padding: 44px 20px 70px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SEARCH SECTION ── */
+    .search-section {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(196,18,48,0.25);
+      border-radius: 20px;
+      padding: 36px 40px;
+      margin-bottom: 36px;
+      backdrop-filter: blur(8px);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .search-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .search-sub {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap::before {
+      content: '🔍';
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 18px 16px 46px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .search-input:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.09);
+    }
+
+    .search-btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(196,18,48,0.35);
+    }
+
+    .search-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(196,18,48,0.45); }
+    .search-btn:active { transform: translateY(0); }
+
+    .search-hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.28);
+      margin-top: 12px;
+    }
+
+    /* ── LIVE CLOCK ── */
+    .live-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(196,18,48,0.1);
+      border: 1px solid rgba(196,18,48,0.25);
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--emerald-light);
+      animation: blink 1.8s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.4; transform:scale(0.7); }
+    }
+
+    .live-banner span {
+      font-size: 12.5px;
+      color: var(--gold-light);
+      letter-spacing: 0.04em;
+    }
+
+    .live-banner #live-time { font-weight: 600; color: #fff; }
+
+    /* ── RESULT AREA ── */
+    #result-area { display: none; animation: fadeUp 0.5s ease both; }
+
+    .status-card {
+      border-radius: 14px;
+      padding: 20px 26px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .status-card.verified {
+      background: var(--green-bg);
+      border: 1.5px solid var(--green-border);
+    }
+
+    .status-card.expired-cert {
+      background: var(--amber-bg);
+      border: 1.5px solid var(--amber-border);
+    }
+
+    .status-card.invalid {
+      background: var(--red-bg);
+      border: 1.5px solid var(--red-border);
+    }
+
+    .status-icon {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .status-icon.ok { background: var(--emerald-light); }
+    .status-icon.warn { background: var(--amber-dot); color: #fff; }
+    .status-icon.fail { background: var(--red); color: #fff; }
+
+    .status-text strong {
+      display: block; font-size: 16px; font-weight: 600;
+    }
+
+    .status-card.verified .status-text strong { color: var(--emerald); }
+    .status-card.expired-cert .status-text strong { color: var(--amber); }
+    .status-card.invalid .status-text strong { color: var(--red); }
+
+    .status-text span {
+      font-size: 13px; margin-top: 3px; display: block;
+    }
+
+    .status-card.verified .status-text span { color: #1a5c3a; }
+    .status-card.expired-cert .status-text span { color: #6e5407; }
+    .status-card.invalid .status-text span { color: #8b1a1a; }
+
+    /* ── CERTIFICATE CARD ── */
+    .cert-card {
+      background: var(--cream);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.05),
+        0 24px 64px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(196,18,48,0.2);
+    }
+
+    .cert-top-stripe {
+      height: 7px;
+      background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 35%, var(--gold-light) 55%, var(--gold) 80%, var(--navy) 100%);
+    }
+
+    .cert-body {
+      padding: 42px 48px;
+    }
+
+    .cert-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      gap: 20px;
+    }
+
+    .cert-issued-by {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .cert-holder-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+
+    .cert-id-badge {
+      background: var(--navy);
+      color: var(--gold-light);
+      border-radius: 10px;
+      padding: 10px 18px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .cert-id-badge .id-label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.7;
+      display: block;
+    }
+
+    .cert-id-badge .id-value {
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px 40px;
+      margin-bottom: 32px;
+    }
+
+    .info-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 15px;
+      color: var(--steel);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .info-value.bold {
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .body-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy);
+      color: var(--gold-light);
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-pill.completed {
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      color: var(--emerald);
+    }
+
+    .status-pill.completed::before { background: var(--emerald-light); }
+
+    .status-pill.expired {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-border);
+      color: var(--amber);
+    }
+
+    .status-pill.expired::before { background: var(--amber-dot); }
+
+    .status-pill::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 28px 0;
+    }
+
+    /* Seal row */
+    .seal-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .seal-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .official-seal {
+      width: 74px; height: 74px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3060 100%);
+      border: 3px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 0 0 4px rgba(196,18,48,0.15), 0 4px 18px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .seal-info strong {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      color: var(--navy);
+      display: block;
+    }
+
+    .seal-info span {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .ref-block { text-align: right; }
+
+    .ref-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .ref-value {
+      font-size: 13.5px;
+      color: var(--steel);
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    .ref-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Accreditation logos inside cert */
+    .cert-accred-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .cert-accred-label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .cert-accred-logos {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cert-accred-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .cert-accred-logo:hover { opacity: 1; }
+
+    .cert-footer {
+      background: #f1f5f9;
+      border-top: 1px solid var(--border);
+      padding: 18px 48px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .cert-footer .lock { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    .cert-footer p {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .bottom-notice {
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .bottom-notice p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.7;
+    }
+
+    .bottom-notice a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .empty-icon { font-size: 52px; margin-bottom: 16px; }
+
+    .empty-state h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60% { transform: translateX(-6px); }
+      40%,80% { transform: translateX(6px); }
+    }
+
+    .shake { animation: shake 0.4s ease; }
+
+    @media (max-width: 620px) {
+      .header-inner { padding: 14px 20px; }
+      .header-tag { display: none; }
+      .search-section { padding: 26px 22px; }
+      .search-row { flex-direction: column; }
+      .search-btn { width: 100%; text-align: center; }
+      .cert-body { padding: 28px 22px; }
+      .cert-footer { padding: 16px 22px; }
+      .info-grid { grid-template-columns: 1fr; gap: 18px; }
+      .cert-holder-name { font-size: 28px; }
+      .cert-header { flex-direction: column; }
+      .cert-id-badge { text-align: left; }
+      .seal-row { flex-direction: column; align-items: flex-start; }
+      .ref-block { text-align: left; }
+      .accreditation-inner { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header-bar">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div class="logo-seal"><img src="https://aiem.co.za/wp-content/uploads/2024/02/HD-PNG-LOGO.png" alt="AIEM logo"></div>
+        <div class="logo-text">
+          <strong>AIEM</strong>
+          <span>Africa Institute of Emergency Medicine &middot; South Africa</span>
+        </div>
+      </div>
+      <div class="header-tag">
+        <div class="tag-top">Official Portal</div>
+        <div class="tag-bottom">Certificate Verification System</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCREDITATION LOGOS BAR -->
+  <div class="accreditation-bar">
+    <div class="accreditation-inner">
+      <div class="accred-label">Accredited by</div>
+      <div class="accred-logos">
+        <div class="accred-logo-wrap" title="American Heart Association Authorised Training Center">
+          <img src="https://aiem.co.za/wp-content/uploads/2024/02/AHA-Logo.jpg" alt="AHA">
+        </div>
+        <div class="accred-logo-wrap" title="ITLS Southern Africa Accredited Training Centre">
+          <img src="https://aiem.co.za/wp-content/uploads/2024/02/ITLS-Logo.jpg" alt="ITLS">
+        </div>
+        <div class="accred-logo-wrap" title="SAIOSH Corporate Member">
+          <img src="https://aiem.co.za/wp-content/uploads/2024/02/SAIOSH-Logo.jpg" alt="SAIOSH">
+        </div>
+        <div class="accred-logo-wrap" title="INTRA Licensed Health and Safety Training Provider">
+          <img src="https://aiem.co.za/wp-content/uploads/2024/02/Intra-Logo.jpg" alt="INTRA">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+
+    <div class="live-banner">
+      <div class="live-dot"></div>
+      <span>Live verification system &mdash; <span id="live-time"></span></span>
+    </div>
+
+    <div class="search-section">
+      <div class="search-heading">Verify a Certificate</div>
+      <div class="search-sub">Scan the QR code printed on the certificate, or enter the certificate number below to confirm it was issued by AIEM.</div>
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="e.g. AIEM-BLS-25-0088"
+            maxlength="30"
+            autocomplete="off"
+          />
+        </div>
+        <button class="search-btn" onclick="lookupCertificate()">Verify &rarr;</button>
+      </div>
+      <div class="search-hint">Certificate numbers are printed on every AIEM certificate, next to the QR code</div>
+    </div>
+
+    <div id="result-area">
+
+      <div class="status-card" id="status-card">
+        <div class="status-icon" id="status-icon"></div>
+        <div class="status-text">
+          <strong id="status-heading"></strong>
+          <span id="status-sub"></span>
+        </div>
+      </div>
+
+      <div class="cert-card" id="cert-card">
+        <div class="cert-top-stripe"></div>
+
+        <div class="cert-body">
+          <div class="cert-header">
+            <div class="cert-title-block">
+              <div class="cert-issued-by">Certificate Holder</div>
+              <div class="cert-holder-name" id="r-name">&mdash;</div>
+            </div>
+            <div class="cert-id-badge">
+              <span class="id-label">Certificate No.</span>
+              <span class="id-value" id="r-id-display">&mdash;</span>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Course Completed</div>
+              <div class="info-value bold" id="r-course">&mdash;</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Accrediting Body</div>
+              <div style="margin-top:4px;">
+                <div class="body-pill" id="r-body">&mdash;</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Issuing Institution</div>
+              <div class="info-value" id="r-institution">Africa Institute of Emergency Medicine (AIEM)</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Delivery Mode</div>
+              <div class="info-value" id="r-delivery">&mdash;</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Date Issued</div>
+              <div class="info-value bold" id="r-date">&mdash;</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Valid Until</div>
+              <div class="info-value" id="r-expiry">&mdash;</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Certificate Number</div>
+              <div class="info-value" id="r-certnum">&mdash;</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Certification Status</div>
+              <div style="margin-top:4px;">
+                <span class="status-pill" id="r-status-pill">&mdash;</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="seal-row">
+            <div class="seal-block">
+              <div class="official-seal">✚</div>
+              <div class="seal-info">
+                <strong>Officially Authenticated</strong>
+                <span>Verified by Africa Institute of Emergency Medicine</span>
+                <span>CPD-Accredited Training Provider &middot; South Africa</span>
+              </div>
+            </div>
+            <div class="ref-block">
+              <div class="ref-label">Verification Reference</div>
+              <div class="ref-value" id="r-ref">&mdash;</div>
+              <div class="ref-sub">Scan / lookup timestamp recorded</div>
+            </div>
+          </div>
+
+          <!-- Accreditation logos inside cert -->
+          <div class="cert-accred-row">
+            <span class="cert-accred-label">Accredited by</span>
+            <div class="cert-accred-logos">
+              <img class="cert-accred-logo" src="https://aiem.co.za/wp-content/uploads/2024/02/AHA-Logo.jpg" alt="AHA">
+              <img class="cert-accred-logo" src="https://aiem.co.za/wp-content/uploads/2024/02/ITLS-Logo.jpg" alt="ITLS">
+              <img class="cert-accred-logo" src="https://aiem.co.za/wp-content/uploads/2024/02/SAIOSH-Logo.jpg" alt="SAIOSH">
+              <img class="cert-accred-logo" src="https://aiem.co.za/wp-content/uploads/2024/02/Intra-Logo.jpg" alt="INTRA">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cert-footer">
+          <span class="lock">🔒</span>
+          <p>This record is served directly from AIEM's official certificate verification portal. Any discrepancy or suspected misuse of this certificate should be reported to AIEM immediately at Training@aiem.co.za.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>Enter a Certificate Number Above</h3>
+      <p>Or scan the QR code printed on the certificate &mdash; the record will appear here automatically.</p>
+    </div>
+
+    <div class="bottom-notice">
+      <p>
+        Records maintained by the Africa Institute of Emergency Medicine (AIEM) in accordance with CPD accreditation requirements.<br/>
+        For queries, contact: <a href="mailto:Training@aiem.co.za">Training@aiem.co.za</a> &middot; 011 706 4049
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    /* ============================================================
+       AIEM CERTIFICATE RECORDS
+       -----------------------------------------------------------
+       Add one entry per certificate. The key (e.g. "AIEM-BLS-25-0088")
+       is the certificate number — it's what gets printed on the
+       certificate and encoded into that certificate's QR code.
+
+       expiry must be an ISO date (YYYY-MM-DD) so the page can work
+       out automatically whether the certification is still active.
+       These five records are placeholders — replace them with your
+       real data (or load them from a spreadsheet/database export).
+       ============================================================ */
+    const CERTIFICATES = {
+      "AIEM-BLS-24-0193": {
+        name:        "Ruth Marengera",
+        course:      "Advanced Emergency First Aid Responder",
+        body:        "American Heart Association (AHA)",
+        delivery:    "In-Person – Sandton Training Centre",
+        issueDate:   "14 March 2024",
+        expiry:      "2026-03-14",
+        expiryDisplay: "14 March 2026",
+        ref:         "VRF-20240314-0193",
+      },
+      "AIEM-ACLS-25-0088": {
+        name:        "SARAH VAN DER MERWE",
+        course:      "Advanced Cardiovascular Life Support (AHA) – ACLS",
+        body:        "American Heart Association (AHA)",
+        delivery:    "In-Person – Sandton Training Centre",
+        issueDate:   "02 June 2025",
+        expiry:      "2027-06-02",
+        expiryDisplay: "02 June 2027",
+        ref:         "VRF-20250602-0088",
+      },
+      "AIEM-ITLS-25-0450": {
+        name:        "KAGISO NDLOVU",
+        course:      "International Trauma Life Support – ITLS",
+        body:        "ITLS Southern Africa",
+        delivery:    "In-Person – Sandton Training Centre",
+        issueDate:   "20 January 2025",
+        expiry:      "2027-01-20",
+        expiryDisplay: "20 January 2027",
+        ref:         "VRF-20250120-0450",
+      },
+      "AIEM-PALS-23-0021": {
+        name:        "EMMA JACOBS",
+        course:      "Paediatric Advanced Life Support (AHA) – PALS",
+        body:        "American Heart Association (AHA)",
+        delivery:    "In-Person – Sandton Training Centre",
+        issueDate:   "10 May 2023",
+        expiry:      "2025-05-10",
+        expiryDisplay: "10 May 2025",
+        ref:         "VRF-20230510-0021",
+      },
+      "AIEM-HS-26-0009": {
+        name:        "MZWANDILE DUBE",
+        course:      "Workplace Health & Safety Induction",
+        body:        "INTRA Licensed Provider",
+        delivery:    "Online – Self-Paced",
+        issueDate:   "05 January 2026",
+        expiry:      "2028-01-05",
+        expiryDisplay: "05 January 2028",
+        ref:         "VRF-20260105-0009",
+      },
+    };
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-time').textContent = now.toLocaleString('en-ZA', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
+      });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    function lookupCertificate(prefilledValue) {
+      const inputEl = document.getElementById('search-input');
+      const raw = (typeof prefilledValue === 'string' ? prefilledValue : inputEl.value).trim();
+      const key = raw.toUpperCase().replace(/\s+/g, '');
+
+      if (!raw) {
+        inputEl.classList.add('shake');
+        inputEl.focus();
+        setTimeout(() => inputEl.classList.remove('shake'), 450);
+        return;
+      }
+
+      let cert = null;
+      for (const k of Object.keys(CERTIFICATES)) {
+        if (k.toUpperCase().replace(/\s+/g, '') === key) {
+          cert = CERTIFICATES[k];
+          break;
+        }
+      }
+
+      const resultArea  = document.getElementById('result-area');
+      const emptyState  = document.getElementById('empty-state');
+      const certCard    = document.getElementById('cert-card');
+      const statusCard  = document.getElementById('status-card');
+      const statusIcon  = document.getElementById('status-icon');
+      const statusHead  = document.getElementById('status-heading');
+      const statusSub   = document.getElementById('status-sub');
+
+      emptyState.style.display = 'none';
+      resultArea.style.display = 'block';
+      resultArea.style.animation = 'none';
+      requestAnimationFrame(() => { resultArea.style.animation = ''; });
+
+      if (cert) {
+        const today = new Date();
+        const expiryDate = new Date(cert.expiry + 'T23:59:59');
+        const isExpired = today > expiryDate;
+
+        if (isExpired) {
+          statusCard.className = 'status-card expired-cert';
+          statusIcon.className = 'status-icon warn';
+          statusIcon.textContent = '!';
+          statusHead.textContent = 'Certificate Found — Certification Expired';
+          statusSub.textContent  = 'This certificate is genuine but the certification period has ended. The holder may need to recertify.';
+        } else {
+          statusCard.className = 'status-card verified';
+          statusIcon.className = 'status-icon ok';
+          statusIcon.textContent = '✓';
+          statusHead.textContent = 'Certificate Verified Successfully';
+          statusSub.textContent  = 'This certificate is authentic and on record at AIEM, and the certification is currently active.';
+        }
+
+        certCard.style.display = 'block';
+
+        document.getElementById('r-name').textContent        = cert.name;
+        document.getElementById('r-id-display').textContent  = key;
+        document.getElementById('r-course').textContent      = cert.course;
+        document.getElementById('r-body').textContent         = cert.body;
+        document.getElementById('r-delivery').textContent    = cert.delivery;
+        document.getElementById('r-date').textContent         = cert.issueDate;
+        document.getElementById('r-expiry').textContent      = cert.expiryDisplay;
+        document.getElementById('r-certnum').textContent     = key;
+        document.getElementById('r-ref').textContent          = cert.ref;
+
+        const statusPill = document.getElementById('r-status-pill');
+        if (isExpired) {
+          statusPill.className = 'status-pill expired';
+          statusPill.textContent = 'Certification Expired';
+        } else {
+          statusPill.className = 'status-pill completed';
+          statusPill.textContent = 'Certification Active';
+        }
+
+      } else {
+        statusCard.className = 'status-card invalid';
+        statusIcon.className = 'status-icon fail';
+        statusIcon.textContent = '✕';
+        statusHead.textContent = 'No Certificate Found';
+        statusSub.textContent  = `No record was found for "${raw}". Please check the certificate number and try again, or contact AIEM directly.`;
+
+        certCard.style.display = 'none';
+      }
+
+      resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('search-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') lookupCertificate();
+    });
+
+    /* ---- QR code auto-verify ----
+       A certificate's QR code should point to this page with the
+       certificate number in the URL, e.g.:
+       https://aiem.co.za/verify/?id=AIEM-BLS-25-0088
+       On load, if that parameter is present, pre-fill the search box
+       and run the lookup automatically so scanning the QR code goes
+       straight to the result. */
+    (function autoVerifyFromQR() {
+      const params = new URLSearchParams(window.location.search);
+      const idFromQR = params.get('id') || params.get('cert') || params.get('certificate');
+      if (idFromQR) {
+        document.getElementById('search-input').value = idFromQR;
+        lookupCertificate(idFromQR);
+      }
+    })();
+  </script>
+
+</body>
+</html>
